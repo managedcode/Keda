@@ -1,10 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ManagedCode.Keda.Core", "ManagedCode.Keda.Core\ManagedCode.Keda.Core.csproj", "{D9057850-69AB-4BC9-A111-953524621071}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ManagedCode.Keda.Tests", "ManagedCode.Keda.Tests\ManagedCode.Keda.Tests.csproj", "{7479B135-1BE1-4E98-BDB5-76976E79D3CD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ManagedCode.Keda.Orleans", "ManagedCode.Keda.Orleans\ManagedCode.Keda.Orleans.csproj", "{65DC8DB6-1BF3-43CD-970C-3C8FCD347F34}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ManagedCode.Keda.Orleans.Scaler", "ManagedCode.Keda.Orleans.Scaler\ManagedCode.Keda.Orleans.Scaler.csproj", "{CE8F36D7-5305-4E88-9530-95F18388A392}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -12,17 +10,13 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{D9057850-69AB-4BC9-A111-953524621071}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D9057850-69AB-4BC9-A111-953524621071}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D9057850-69AB-4BC9-A111-953524621071}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D9057850-69AB-4BC9-A111-953524621071}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7479B135-1BE1-4E98-BDB5-76976E79D3CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7479B135-1BE1-4E98-BDB5-76976E79D3CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7479B135-1BE1-4E98-BDB5-76976E79D3CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7479B135-1BE1-4E98-BDB5-76976E79D3CD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{65DC8DB6-1BF3-43CD-970C-3C8FCD347F34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{65DC8DB6-1BF3-43CD-970C-3C8FCD347F34}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{65DC8DB6-1BF3-43CD-970C-3C8FCD347F34}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{65DC8DB6-1BF3-43CD-970C-3C8FCD347F34}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE8F36D7-5305-4E88-9530-95F18388A392}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE8F36D7-5305-4E88-9530-95F18388A392}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE8F36D7-5305-4E88-9530-95F18388A392}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE8F36D7-5305-4E88-9530-95F18388A392}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
