@@ -1,3 +1,4 @@
+using ManagedCode.Keda.Orleans.Scaler.Models;
 using Microsoft.Extensions.Logging;
 using Orleans;
 using Orleans.Runtime;
@@ -6,24 +7,17 @@ namespace ManagedCode.Keda.Orleans.Scaler;
 
 public class GrainStatsService
 {
-    private readonly IManagementGrain _managementGrain;
+    private readonly IClusterClient _orleansClusterClient;
     private readonly ILogger<GrainStatsService> _logger;
+    private readonly IManagementGrain _managementGrain;
 
     public GrainStatsService(IClusterClient orleansClusterClient, ILogger<GrainStatsService> logger)
     {
+        _orleansClusterClient = orleansClusterClient;
         _logger = logger;
-
-        OrleansClusterClient = orleansClusterClient;
-
-        if (OrleansClusterClient.IsInitialized)
-        {
-            Task.Run(async () => await OrleansClusterClient.Connect());
-        }
-
-        _managementGrain = OrleansClusterClient.GetGrain<IManagementGrain>(0);
+        _managementGrain = _orleansClusterClient.GetGrain<IManagementGrain>(0);
     }
-
-    public IClusterClient OrleansClusterClient { get; }
+    
 
     public async Task<int> GetGrainCountInClusterAsync(string? grainType = null)
     {
@@ -75,9 +69,3 @@ public class GrainStatsService
         return activeSiloCount;
     }
 }
-
-public record GrainInfo(string Type, string PrimaryKey, string SiloName);
-
-public record SiloInfo(string SiloName, string SiloAddress);
-
-public record Limit(string GrainType, int Upperbound);

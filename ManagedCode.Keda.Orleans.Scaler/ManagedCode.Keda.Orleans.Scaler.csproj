@@ -5,15 +5,18 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
-    
+
     <ItemGroup>
         <Protobuf Include="Protos\externalscaler.proto" GrpcServices="Server" />
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="ManagedCode.TimeSeries" Version="0.0.3" />
         <PackageReference Include="Microsoft.Orleans.Server" Version="3.6.5" />
-        <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
+        <PackageReference Include="Microsoft.Orleans.Core.Abstractions" Version="3.6.5" />
+        <PackageReference Include="Microsoft.Orleans.OrleansRuntime" Version="3.6.5" />
         <PackageReference Include="Grpc.AspNetCore" Version="2.48.0" />
+        <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
     </ItemGroup>
 
     <!--NuGet-->
@@ -23,9 +26,10 @@
         <Description>Keda</Description>
         <PackageTags>managedcode, keda, orleans</PackageTags>
     </PropertyGroup>
-
+    
     <ItemGroup>
         <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All"/>
     </ItemGroup>
-    
+
+
 </Project>

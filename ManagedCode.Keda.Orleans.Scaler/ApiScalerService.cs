@@ -1,13 +1,13 @@
-using System.Net.Http.Json;
 using System.Text.Json;
+using ManagedCode.Keda.Orleans.Scaler.Models;
 using Microsoft.Extensions.Logging;
 
 namespace ManagedCode.Keda.Orleans.Scaler;
 
 public class ApiScalerService
 {
-    private readonly ILogger<ApiScalerService> _logger;
     private readonly GrainStatsService _grainStatsService;
+    private readonly ILogger<ApiScalerService> _logger;
 
     public ApiScalerService(ILogger<ApiScalerService> logger, GrainStatsService grainStatsService)
     {
@@ -28,5 +28,3 @@ public class ApiScalerService
         return stats;
     }
 }
-
-public record ScalerStats(int GrainCount, int GrainsPerSilo, Dictionary<string, int> Grains);

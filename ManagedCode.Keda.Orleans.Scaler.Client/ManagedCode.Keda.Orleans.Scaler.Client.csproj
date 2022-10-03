@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <OutputType>Library</OutputType>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Orleans.Client" Version="3.6.5" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Include="..\ManagedCode.Keda.Orleans.Scaler\Metrics\IRequestTrackerGrain.cs">
+            <Link>Metrics\IRequestTrackerGrain.cs</Link>
+        </Compile>
+        <Compile Include="..\ManagedCode.Keda.Orleans.Scaler\Metrics\ISignalRTrackerGrain.cs">
+            <Link>Metrics\ISignalRTrackerGrain.cs</Link>
+        </Compile>
+    </ItemGroup>
+
+    <!--NuGet-->
+    <PropertyGroup>
+        <Title>ManagedCode.Keda.Orleans.Scaler.Client</Title>
+        <PackageId>ManagedCode.Keda.Orleans.Scaler.Client</PackageId>
+        <Description>Keda</Description>
+        <PackageTags>managedcode, keda, orleans, client, signalR, webapi</PackageTags>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
+    </ItemGroup>
+
+</Project>
