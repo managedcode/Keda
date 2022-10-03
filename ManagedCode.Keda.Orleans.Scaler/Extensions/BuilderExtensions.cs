@@ -38,9 +38,9 @@ public static class BuilderExtensions
         return app;
     }
 
-    public static IEndpointRouteBuilder MapApiOrleansScaler(this IEndpointRouteBuilder endpoints, string apiRoute = "/api/scaling/stats")
+    public static IEndpointRouteBuilder MapApiOrleansScaler(this IEndpointRouteBuilder endpoints, string apiRoute = "/api/scaling/stats/orleans")
     {
-        endpoints.MapGet(apiRoute, ([FromServices] ApiScalerService scaler) => scaler.GetStatsAsync());
+        endpoints.MapGet(apiRoute, ([FromServices] ApiScalerService scaler) => scaler.GetOrleansStatsAsync());
 
         return endpoints;
     }

@@ -15,13 +15,12 @@ public class ApiScalerService
         _grainStatsService = grainStatsService;
     }
 
-    public async Task<ScalerStats> GetStatsAsync()
+    public async Task<OrleansStats> GetOrleansStatsAsync()
     {
-        var siloCount = await _grainStatsService.GetActiveSiloCountAsync();
         var grains = await _grainStatsService.GetGrainActivationsAsync();
         var grainsCount = grains.Sum(x => x.Value);
 
-        var stats = new ScalerStats(grainsCount, grainsCount / siloCount, grains);
+        var stats = new OrleansStats(grainsCount, grains);
 
         _logger.LogInformation(JsonSerializer.Serialize(stats));
 
