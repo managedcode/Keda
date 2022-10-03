@@ -18,6 +18,9 @@ public class RequestTrackerGrain : Grain, IRequestTrackerGrain
 
     public Task<int> GetRequestsCount()
     {
+        if (_summer.Samples.Count == 0)
+            return Task.FromResult(0);
+        
         var avg = _summer.Samples.Average(a => a.Value);
         return Task.FromResult((int) Math.Round(avg));
     }

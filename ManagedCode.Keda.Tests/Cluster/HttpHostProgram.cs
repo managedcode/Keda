@@ -20,15 +20,18 @@ public class HttpHostProgram
         });
         
         var app = builder.Build();
-
+        
+        //add Middlewares
         app.UseScalerForRequest();
+        
+        //map controllers
         app.MapApiRequestsScaler();
         app.MapSignalRScaler();
-       
+        app.MapOrleansScaler();
         
         app.MapGet("/random", (a) => Task.FromResult(new Random().Next()));
         app.MapHub<TestHub>(nameof(TestHub));
-        
+
         app.Run();
     }
 }

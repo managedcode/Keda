@@ -43,16 +43,26 @@ public static class BuilderExtensions
         endpoints.MapGet(apiRoute, async ([FromServices] IClusterClient clusterClient) =>
         {
             var count = await clusterClient.GetGrain<ISignalRTrackerGrain>(0).GetConnections();
-
             return new SignalRStats(count);
         });
 
         return endpoints;
     }
 
-    public static IEndpointRouteBuilder MapApiOrleansScaler(this IEndpointRouteBuilder endpoints, string apiRoute = "/api/scaling/orleans")
+    public static IEndpointRouteBuilder MapOrleansScaler(this IEndpointRouteBuilder endpoints, string apiRoute = "/api/scaling/orleans")
     {
         endpoints.MapGet(apiRoute, ([FromServices] ApiOrleansScalerService scaler) => scaler.GetOrleansStatsAsync());
+
+        return endpoints;
+    }
+    
+    public static IEndpointRouteBuilder MapRequestsScaler(this IEndpointRouteBuilder endpoints, string apiRoute = "/api/scaling/requests")
+    {
+        endpoints.MapGet(apiRoute, async ([FromServices] IClusterClient clusterClient) =>
+        {
+            var count = await clusterClient.GetGrain<IRequestTrackerGrain>(0).GetRequestsCount();
+            return new RequestStats(count);
+        });
 
         return endpoints;
     }

@@ -27,6 +27,10 @@ public class SomeTest
         
         count = await _testApp.Cluster.Client.GetGrain<IRequestTrackerGrain>(0).GetRequestsCount();
         count.Should().Be(1);
+        
+        request = await _testApp.CreateClient().GetAsync("/api/scaling/requests");
+        request.StatusCode.Should().Be(HttpStatusCode.OK);
+        var content = await request.Content.ReadAsStringAsync();
     }
 
     [Fact]
@@ -41,6 +45,10 @@ public class SomeTest
         
         count = await _testApp.Cluster.Client.GetGrain<ISignalRTrackerGrain>(0).GetConnections();
         count.Should().Be(1);
+        
+        var request = await _testApp.CreateClient().GetAsync("/api/scaling/signalr");
+        request.StatusCode.Should().Be(HttpStatusCode.OK);
+        var content = await request.Content.ReadAsStringAsync();
 
         await client.StopAsync();
         await client.DisposeAsync();
@@ -50,5 +58,13 @@ public class SomeTest
         count = await _testApp.Cluster.Client.GetGrain<ISignalRTrackerGrain>(0).GetConnections();
         count.Should().Be(0);
         
+    }
+    
+    [Fact]
+    public async Task Orleans()
+    {
+        var request = await _testApp.CreateClient().GetAsync("/api/scaling/orleans");
+        request.StatusCode.Should().Be(HttpStatusCode.OK);
+        var content = await request.Content.ReadAsStringAsync();
     }
 }
