@@ -19,7 +19,6 @@
         <PackageTags>managedcode, keda, orleans, client, signalR, webapi</PackageTags>
     </PropertyGroup>
     
-
     <ItemGroup>
       <ProjectReference Include="..\ManagedCode.Keda.Orleans.Interfaces\ManagedCode.Keda.Orleans.Interfaces.csproj" />
     </ItemGroup>
