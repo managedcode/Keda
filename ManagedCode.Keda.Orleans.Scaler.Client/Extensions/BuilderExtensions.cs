@@ -19,14 +19,11 @@ public static class BuilderExtensions
         return app.UseMiddleware<HttpRequestMetricMiddleware>();
     }
 
-    public static void AddScalerForSignalR(this HubOptions options)
+    public static IApplicationBuilder UseApiOrleansScaler(this IApplicationBuilder app)
     {
-        if (options == null)
-        {
-            throw new ArgumentNullException(nameof(options));
-        }
+        app.UseEndpoints(endpoints => { endpoints.MapGrpcService<GrpcOrleansScalerService>(); });
 
-        options.AddFilter<SignalRMonitorMiddleware>();
+        return app;
     }
 
     public static IEndpointRouteBuilder MapApiRequestsScaler(this IEndpointRouteBuilder endpoints, string apiRoute = "/api/scaling/requests")
@@ -51,5 +48,38 @@ public static class BuilderExtensions
         });
 
         return endpoints;
+    }
+
+    public static IEndpointRouteBuilder MapApiOrleansScaler(this IEndpointRouteBuilder endpoints, string apiRoute = "/api/scaling/orleans")
+    {
+        endpoints.MapGet(apiRoute, ([FromServices] ApiOrleansScalerService scaler) => scaler.GetOrleansStatsAsync());
+
+        return endpoints;
+    }
+
+    public static void AddScalerForSignalR(this HubOptions options)
+    {
+        if (options == null)
+        {
+            throw new ArgumentNullException(nameof(options));
+        }
+
+        options.AddFilter<SignalRMonitorMiddleware>();
+    }
+    
+    public static IServiceCollection AddGrpcOrleansScaling(this IServiceCollection services)
+    {
+        services.AddSingleton<OrleansStatsService>();
+        services.AddGrpc();
+
+        return services;
+    }
+
+    public static IServiceCollection AddApiOrleansScaling(this IServiceCollection services)
+    {
+        services.AddSingleton<OrleansStatsService>();
+        services.AddSingleton<ApiOrleansScalerService>();
+
+        return services;
     }
 }

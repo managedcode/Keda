@@ -1,8 +1,7 @@
 using System.Text.Json;
-using ManagedCode.Keda.Orleans.Scaler.Models;
-using Microsoft.Extensions.Logging;
+using ManagedCode.Keda.Orleans.Scaler.Client.Models;
 
-namespace ManagedCode.Keda.Orleans.Scaler;
+namespace ManagedCode.Keda.Orleans.Scaler.Client;
 
 public class ApiOrleansScalerService
 {

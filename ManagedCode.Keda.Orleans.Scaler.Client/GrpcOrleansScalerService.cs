@@ -1,9 +1,8 @@
 using Externalscaler;
 using Grpc.Core;
-using ManagedCode.Keda.Orleans.Scaler.Models;
-using Microsoft.Extensions.Logging;
+using ManagedCode.Keda.Orleans.Scaler.Client.Models;
 
-namespace ManagedCode.Keda.Orleans.Scaler;
+namespace ManagedCode.Keda.Orleans.Scaler.Client;
 
 public class GrpcOrleansScalerService : ExternalScaler.ExternalScalerBase
 {

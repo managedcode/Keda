@@ -1,3 +1,4 @@
+using ManagedCode.Keda.Orleans.Scaler.Client.Extensions;
 using ManagedCode.Keda.Orleans.Scaler.Extensions;
 using Orleans;
 using Orleans.Hosting;
