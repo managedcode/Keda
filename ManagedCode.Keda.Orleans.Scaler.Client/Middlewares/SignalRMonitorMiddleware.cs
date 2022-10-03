@@ -1,3 +1,4 @@
+using ManagedCode.Keda.Orleans.Scaler.Metrics;
 using Microsoft.AspNetCore.SignalR;
 using Orleans;
 

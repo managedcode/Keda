@@ -1,7 +1,7 @@
 using Orleans;
 using Orleans.Concurrency;
 
-namespace ManagedCode.Keda.Orleans.Scaler.Client;
+namespace ManagedCode.Keda.Orleans.Scaler.Metrics;
 
 public interface IRequestTrackerGrain : IGrainWithIntegerKey
 {

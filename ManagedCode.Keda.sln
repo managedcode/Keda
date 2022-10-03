@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ManagedCode.Keda.Orleans.Sc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ManagedCode.Keda.Orleans.Scaler.Client", "ManagedCode.Keda.Orleans.Scaler.Client\ManagedCode.Keda.Orleans.Scaler.Client.csproj", "{BC8F655E-0497-4C5F-8EAD-17738102393E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ManagedCode.Keda.Orleans.Interfaces", "ManagedCode.Keda.Orleans.Interfaces\ManagedCode.Keda.Orleans.Interfaces.csproj", "{C0554AC9-46F4-442D-9F46-F12DBA3A15DA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{BC8F655E-0497-4C5F-8EAD-17738102393E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BC8F655E-0497-4C5F-8EAD-17738102393E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BC8F655E-0497-4C5F-8EAD-17738102393E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0554AC9-46F4-442D-9F46-F12DBA3A15DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0554AC9-46F4-442D-9F46-F12DBA3A15DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0554AC9-46F4-442D-9F46-F12DBA3A15DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0554AC9-46F4-442D-9F46-F12DBA3A15DA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

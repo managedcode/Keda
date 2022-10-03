@@ -1,4 +1,3 @@
-using ManagedCode.Keda.Orleans.Scaler.Client;
 using Orleans;
 using Orleans.Concurrency;
 

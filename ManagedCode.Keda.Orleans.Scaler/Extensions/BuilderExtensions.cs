@@ -10,7 +10,7 @@ namespace ManagedCode.Keda.Orleans.Scaler.Extensions;
 
 public static class BuilderExtensions
 {
-    public static ISiloBuilder UseActivationShedding(this ISiloBuilder siloBuilder)
+    public static ISiloBuilder UseScaler(this ISiloBuilder siloBuilder)
     {
         return siloBuilder.ConfigureApplicationParts(parts => parts.AddApplicationPart(typeof(RequestTrackerGrain).Assembly).WithReferences());
     }

@@ -11,15 +11,6 @@
         <PackageReference Include="Microsoft.Orleans.Client" Version="3.6.5" />
     </ItemGroup>
 
-    <ItemGroup>
-        <Compile Include="..\ManagedCode.Keda.Orleans.Scaler\Metrics\IRequestTrackerGrain.cs">
-            <Link>Metrics\IRequestTrackerGrain.cs</Link>
-        </Compile>
-        <Compile Include="..\ManagedCode.Keda.Orleans.Scaler\Metrics\ISignalRTrackerGrain.cs">
-            <Link>Metrics\ISignalRTrackerGrain.cs</Link>
-        </Compile>
-    </ItemGroup>
-
     <!--NuGet-->
     <PropertyGroup>
         <Title>ManagedCode.Keda.Orleans.Scaler.Client</Title>
@@ -30,6 +21,10 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\ManagedCode.Keda.Orleans.Interfaces\ManagedCode.Keda.Orleans.Interfaces.csproj" />
     </ItemGroup>
 
 </Project>
