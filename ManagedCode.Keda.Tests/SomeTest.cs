@@ -17,14 +17,38 @@ public class SomeTest
     }
     
     [Fact]
-    public async Task RequestCount()
+    public async Task OneRequest()
     {
+        var count = await _testApp.Cluster.Client.GetGrain<IRequestTrackerGrain>(0).GetRequestsCount();
+        count.Should().Be(0);
+        
         var request = await _testApp.CreateClient().GetAsync("/random");
         request.StatusCode.Should().Be(HttpStatusCode.OK);
-
-        await Task.Delay(TimeSpan.FromSeconds(5));
         
-        var count = await _testApp.Cluster.Client.GetGrain<IRequestTrackerGrain>(0).GetRequestsCount();
+        count = await _testApp.Cluster.Client.GetGrain<IRequestTrackerGrain>(0).GetRequestsCount();
         count.Should().Be(1);
+    }
+
+    [Fact]
+    public async Task OneSignalR()
+    {
+        var count = await _testApp.Cluster.Client.GetGrain<ISignalRTrackerGrain>(0).GetConnections();
+        count.Should().Be(0);
+        
+        
+        var client = _testApp.CreateSignalRClient(nameof(TestHub));
+        await client.StartAsync();
+        
+        count = await _testApp.Cluster.Client.GetGrain<ISignalRTrackerGrain>(0).GetConnections();
+        count.Should().Be(1);
+
+        await client.StopAsync();
+        await client.DisposeAsync();
+
+        await Task.Delay(TimeSpan.FromSeconds(1));
+        
+        count = await _testApp.Cluster.Client.GetGrain<ISignalRTrackerGrain>(0).GetConnections();
+        count.Should().Be(0);
+        
     }
 }

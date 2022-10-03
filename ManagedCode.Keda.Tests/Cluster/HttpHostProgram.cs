@@ -13,15 +13,21 @@ public class HttpHostProgram
     {
         var builder = WebApplication.CreateBuilder(args);
         builder.Services.AddControllers();
+
+        builder.Services.AddSignalR().AddHubOptions<TestHub>(options =>
+        {
+            options.AddScalerForSignalR();
+        });
+        
         var app = builder.Build();
 
         app.UseScalerForRequest();
         app.MapApiRequestsScaler();
         app.MapSignalRScaler();
-        
+       
         
         app.MapGet("/random", (a) => Task.FromResult(new Random().Next()));
-        
+        app.MapHub<TestHub>(nameof(TestHub));
         
         app.Run();
     }
