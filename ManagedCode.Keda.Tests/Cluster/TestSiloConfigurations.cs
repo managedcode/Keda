@@ -16,7 +16,6 @@ public class TestSiloConfigurations : ISiloConfigurator
         {
             services.AddGrpcOrleansScaling();
             services.AddApiOrleansScaling();
-
         });
     }
 }

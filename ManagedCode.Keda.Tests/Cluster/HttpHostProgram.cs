@@ -14,6 +14,9 @@ public class HttpHostProgram
         var builder = WebApplication.CreateBuilder(args);
         builder.Services.AddControllers();
 
+        builder.Services.AddGrpcOrleansScaling();
+        builder.Services.AddApiOrleansScaling();
+        
         builder.Services.AddSignalR().AddHubOptions<TestHub>(options =>
         {
             options.AddScalerForSignalR();
@@ -24,10 +27,13 @@ public class HttpHostProgram
         //add Middlewares
         app.UseScalerForRequest();
         
+        
         //map controllers
         app.MapApiRequestsScaler();
         app.MapSignalRScaler();
         app.MapOrleansScaler();
+        
+        
         
         app.MapGet("/random", (a) => Task.FromResult(new Random().Next()));
         app.MapHub<TestHub>(nameof(TestHub));

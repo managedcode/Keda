@@ -9,7 +9,7 @@ public class OrleansStatsService
     private readonly ILogger<OrleansStatsService> _logger;
     private readonly IManagementGrain _managementGrain;
 
-    public OrleansStatsService(IGrainFactory orleansClusterClient, ILogger<OrleansStatsService> logger)
+    public OrleansStatsService(IClusterClient orleansClusterClient, ILogger<OrleansStatsService> logger)
     {
         _logger = logger;
         _managementGrain = orleansClusterClient.GetGrain<IManagementGrain>(0);
