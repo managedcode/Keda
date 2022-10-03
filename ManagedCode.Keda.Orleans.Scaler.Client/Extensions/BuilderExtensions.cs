@@ -1,3 +1,4 @@
+using ManagedCode.Keda.Orleans.Interfaces;
 using ManagedCode.Keda.Orleans.Scaler.Client.Middlewares;
 using ManagedCode.Keda.Orleans.Scaler.Client.Models;
 using Microsoft.AspNetCore.Mvc;

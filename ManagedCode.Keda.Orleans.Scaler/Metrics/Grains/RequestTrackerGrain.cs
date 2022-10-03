@@ -1,3 +1,4 @@
+using ManagedCode.Keda.Orleans.Interfaces;
 using ManagedCode.TimeSeries.Sample;
 using Orleans;
 using Orleans.Concurrency;

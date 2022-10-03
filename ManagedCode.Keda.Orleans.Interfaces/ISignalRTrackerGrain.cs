@@ -1,7 +1,7 @@
 using Orleans;
 using Orleans.Concurrency;
 
-namespace ManagedCode.Keda.Orleans.Scaler.Metrics;
+namespace ManagedCode.Keda.Orleans.Interfaces;
 
 public interface ISignalRTrackerGrain : IGrainWithIntegerKey
 {

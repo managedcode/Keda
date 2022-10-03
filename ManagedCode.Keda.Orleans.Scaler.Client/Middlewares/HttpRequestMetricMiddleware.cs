@@ -1,4 +1,4 @@
-using ManagedCode.Keda.Orleans.Scaler.Metrics;
+using ManagedCode.Keda.Orleans.Interfaces;
 using Microsoft.AspNetCore.Http.Extensions;
 using Orleans;
 

@@ -1,5 +1,6 @@
 using System.Net;
 using FluentAssertions;
+using ManagedCode.Keda.Orleans.Interfaces;
 using ManagedCode.Keda.Tests.Cluster;
 using Xunit;
 
@@ -23,7 +24,7 @@ public class SomeTest
 
         await Task.Delay(TimeSpan.FromSeconds(10));
         
-        var count = await _testApp.Cluster.Client.GetGrain<ManagedCode.Keda.Orleans.Scaler.Metrics.IRequestTrackerGrain>(0).GetRequestsCount();
+        var count = await _testApp.Cluster.Client.GetGrain<IRequestTrackerGrain>(0).GetRequestsCount();
         count.Should().Be(1);
     }
 }

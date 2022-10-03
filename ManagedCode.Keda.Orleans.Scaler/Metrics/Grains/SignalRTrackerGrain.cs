@@ -1,3 +1,4 @@
+using ManagedCode.Keda.Orleans.Interfaces;
 using Orleans;
 using Orleans.Concurrency;
 
