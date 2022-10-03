@@ -1,13 +1,12 @@
-using Microsoft.AspNetCore.Http.Extensions;
 using Orleans;
 
 namespace ManagedCode.Keda.Orleans.Scaler.Client.Middlewares;
 
 public class HttpRequestMetricMiddleware
 {
+    private readonly RequestDelegate _next;
     private readonly IClusterClient _clusterClient;
     private readonly ILogger<HttpRequestMetricMiddleware> _logger;
-    private readonly RequestDelegate _next;
 
     public HttpRequestMetricMiddleware(ILogger<HttpRequestMetricMiddleware> logger, IClusterClient clusterClient, RequestDelegate next)
     {

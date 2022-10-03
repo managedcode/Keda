@@ -4,20 +4,20 @@ using Microsoft.Extensions.Logging;
 
 namespace ManagedCode.Keda.Orleans.Scaler;
 
-public class ApiScalerService
+public class ApiOrleansScalerService
 {
-    private readonly GrainStatsService _grainStatsService;
-    private readonly ILogger<ApiScalerService> _logger;
+    private readonly OrleansStatsService _orleansStatsService;
+    private readonly ILogger<ApiOrleansScalerService> _logger;
 
-    public ApiScalerService(ILogger<ApiScalerService> logger, GrainStatsService grainStatsService)
+    public ApiOrleansScalerService(ILogger<ApiOrleansScalerService> logger, OrleansStatsService orleansStatsService)
     {
         _logger = logger;
-        _grainStatsService = grainStatsService;
+        _orleansStatsService = orleansStatsService;
     }
 
     public async Task<OrleansStats> GetOrleansStatsAsync()
     {
-        var grains = await _grainStatsService.GetGrainActivationsAsync();
+        var grains = await _orleansStatsService.GetGrainActivationsAsync();
         var grainsCount = grains.Sum(x => x.Value);
 
         var stats = new OrleansStats(grainsCount, grains);

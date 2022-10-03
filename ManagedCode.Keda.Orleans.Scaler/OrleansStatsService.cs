@@ -5,12 +5,12 @@ using Orleans.Runtime;
 
 namespace ManagedCode.Keda.Orleans.Scaler;
 
-public class GrainStatsService
+public class OrleansStatsService
 {
-    private readonly ILogger<GrainStatsService> _logger;
+    private readonly ILogger<OrleansStatsService> _logger;
     private readonly IManagementGrain _managementGrain;
 
-    public GrainStatsService(IGrainFactory orleansClusterClient, ILogger<GrainStatsService> logger)
+    public OrleansStatsService(IGrainFactory orleansClusterClient, ILogger<OrleansStatsService> logger)
     {
         _logger = logger;
         _managementGrain = orleansClusterClient.GetGrain<IManagementGrain>(0);
