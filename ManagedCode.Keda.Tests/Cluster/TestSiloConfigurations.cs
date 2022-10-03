@@ -10,10 +10,12 @@ public class TestSiloConfigurations : ISiloConfigurator
     public void Configure(ISiloBuilder siloBuilder)
     {
         siloBuilder.UseScaler();
+        
         siloBuilder.ConfigureServices(services =>
         {
-            // services.AddSingleton<T, Impl>(...);
+            services.AddGrpcOrleansScaling();
+            services.AddApiOrleansScaling();
+
         });
-        siloBuilder.ConfigureApplicationParts(parts => parts.AddFromAppDomain());
     }
 }

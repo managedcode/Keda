@@ -17,12 +17,12 @@ public class SomeTest
     }
     
     [Fact]
-    public async Task RequestCont()
+    public async Task RequestCount()
     {
         var request = await _testApp.CreateClient().GetAsync("/random");
         request.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        await Task.Delay(TimeSpan.FromSeconds(10));
+        await Task.Delay(TimeSpan.FromSeconds(5));
         
         var count = await _testApp.Cluster.Client.GetGrain<IRequestTrackerGrain>(0).GetRequestsCount();
         count.Should().Be(1);

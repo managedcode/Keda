@@ -1,3 +1,4 @@
+using ManagedCode.Keda.Orleans.Interfaces;
 using ManagedCode.Keda.Orleans.Scaler.Metrics.Grains;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +13,12 @@ public static class BuilderExtensions
 {
     public static ISiloBuilder UseScaler(this ISiloBuilder siloBuilder)
     {
-        return siloBuilder.ConfigureApplicationParts(parts => parts.AddApplicationPart(typeof(RequestTrackerGrain).Assembly).WithReferences());
+        return siloBuilder.ConfigureApplicationParts(parts =>
+        {
+            parts.AddFrameworkPart(typeof(IRequestTrackerGrain).Assembly);
+            parts.AddFrameworkPart(typeof(RequestTrackerGrain).Assembly);
+            
+        });
     }
 
     public static IServiceCollection AddGrpcOrleansScaling(this IServiceCollection services)
@@ -29,19 +35,5 @@ public static class BuilderExtensions
         services.AddSingleton<ApiOrleansScalerService>();
 
         return services;
-    }
-
-    public static IApplicationBuilder UseApiOrleansScaler(this IApplicationBuilder app)
-    {
-        app.UseEndpoints(endpoints => { endpoints.MapGrpcService<GrpcOrleansScalerService>(); });
-
-        return app;
-    }
-
-    public static IEndpointRouteBuilder MapApiOrleansScaler(this IEndpointRouteBuilder endpoints, string apiRoute = "/api/scaling/orleans")
-    {
-        endpoints.MapGet(apiRoute, ([FromServices] ApiOrleansScalerService scaler) => scaler.GetOrleansStatsAsync());
-
-        return endpoints;
     }
 }

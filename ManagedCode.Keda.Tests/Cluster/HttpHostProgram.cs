@@ -1,3 +1,4 @@
+using ManagedCode.Keda.Orleans.Scaler.Client.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,8 +15,13 @@ public class HttpHostProgram
         builder.Services.AddControllers();
         var app = builder.Build();
 
-        app.MapControllers();
+        app.UseScalerForRequest();
+        app.MapApiRequestsScaler();
+        app.MapSignalRScaler();
+        
+        
         app.MapGet("/random", (a) => Task.FromResult(new Random().Next()));
+        
         
         app.Run();
     }
