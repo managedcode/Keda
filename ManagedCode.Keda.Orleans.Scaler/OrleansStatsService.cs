@@ -5,36 +5,31 @@ using Orleans.Runtime;
 
 namespace ManagedCode.Keda.Orleans.Scaler;
 
-public class GrainStatsService
+public class OrleansStatsService
 {
-    private readonly IClusterClient _orleansClusterClient;
-    private readonly ILogger<GrainStatsService> _logger;
+    private readonly ILogger<OrleansStatsService> _logger;
     private readonly IManagementGrain _managementGrain;
 
-    public GrainStatsService(IClusterClient orleansClusterClient, ILogger<GrainStatsService> logger)
+    public OrleansStatsService(IGrainFactory orleansClusterClient, ILogger<OrleansStatsService> logger)
     {
-        _orleansClusterClient = orleansClusterClient;
         _logger = logger;
-        _managementGrain = _orleansClusterClient.GetGrain<IManagementGrain>(0);
+        _managementGrain = orleansClusterClient.GetGrain<IManagementGrain>(0);
     }
-    
 
-    public async Task<int> GetGrainCountInClusterAsync(string? grainType = null)
+
+    public async Task<int> GetGrainCountInClusterAsync(params string[] grainTypes)
     {
-        var statistics = await _managementGrain.GetDetailedGrainStatistics();
+        var statistics = await _managementGrain.GetDetailedGrainStatistics(grainTypes.Length == 0 ? null : grainTypes);
+
         var activeGrainsInCluster =
             statistics.Select(grainStatistic => new GrainInfo(grainStatistic.GrainType, grainStatistic.GrainIdentity.IdentityString,
                 grainStatistic.SiloAddress.ToGatewayUri().AbsoluteUri));
 
-        var grainsCount = grainType switch
-        {
-            null => activeGrainsInCluster.Count(),
-            _ => activeGrainsInCluster.Count(grainInfo => grainInfo.Type.ToLower().Contains(grainType))
-        };
+        var grainCount = activeGrainsInCluster.Count();
 
-        _logger?.LogInformation($"Found {grainsCount} grain instances of {grainType} in cluster");
+        _logger.LogInformation($"Found {grainCount} grain instances of {grainTypes} in cluster");
 
-        return grainsCount;
+        return grainCount;
     }
 
     public async Task<Dictionary<string, int>> GetGrainActivationsAsync()
@@ -56,7 +51,7 @@ public class GrainStatsService
 
         var silos = detailedHosts
             .Where(x => x.Status == SiloStatus.Active)
-            .Select(_ => new SiloInfo(_.SiloName, _.SiloAddress.ToGatewayUri().AbsoluteUri));
+            .Select(x => new SiloInfo(x.SiloName, x.SiloAddress.ToGatewayUri().AbsoluteUri));
 
         var activeSiloCount = siloNameFilter switch
         {
@@ -64,7 +59,7 @@ public class GrainStatsService
             _ => silos.Count(siloInfo => siloInfo.SiloName.ToLower().Contains(siloNameFilter.ToLower()))
         };
 
-        _logger?.LogInformation($"Found active silos {activeSiloCount} by filter '{siloNameFilter}'");
+        _logger.LogInformation($"Found active silos {activeSiloCount} by filter '{siloNameFilter}'");
 
         return activeSiloCount;
     }

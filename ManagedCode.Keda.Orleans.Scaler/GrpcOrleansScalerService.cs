@@ -5,18 +5,18 @@ using Microsoft.Extensions.Logging;
 
 namespace ManagedCode.Keda.Orleans.Scaler;
 
-public class GrpcScalerService : ExternalScaler.ExternalScalerBase
+public class GrpcOrleansScalerService : ExternalScaler.ExternalScalerBase
 {
     private const string MetricName = "grainThreshold";
     private const string Limits = "limits";
     private const string SiloNameFilter = "siloNameFilter";
-    private readonly GrainStatsService _grainStatsService;
-    private readonly ILogger<GrpcScalerService> _logger;
+    private readonly OrleansStatsService _orleansStatsService;
+    private readonly ILogger<GrpcOrleansScalerService> _logger;
 
-    public GrpcScalerService(GrainStatsService grainStatsService, ILogger<GrpcScalerService> logger)
+    public GrpcOrleansScalerService(OrleansStatsService orleansStatsService, ILogger<GrpcOrleansScalerService> logger)
     {
         _logger = logger;
-        _grainStatsService = grainStatsService;
+        _orleansStatsService = orleansStatsService;
     }
 
     public override async Task<GetMetricsResponse> GetMetrics(GetMetricsRequest request, ServerCallContext context)
@@ -24,14 +24,14 @@ public class GrpcScalerService : ExternalScaler.ExternalScalerBase
         CheckRequestMetadata(request.ScaledObjectRef);
 
         var siloNameFilter = request.ScaledObjectRef.ScalerMetadata[SiloNameFilter];
-        var siloCount = await _grainStatsService.GetActiveSiloCountAsync(siloNameFilter);
+        var siloCount = await _orleansStatsService.GetActiveSiloCountAsync(siloNameFilter);
 
         var needToScale = false;
         var metricValue = 0;
 
         foreach (var limit in GetLimits(request.ScaledObjectRef.ScalerMetadata))
         {
-            var grainCount = await _grainStatsService.GetGrainCountInClusterAsync(limit.GrainType);
+            var grainCount = await _orleansStatsService.GetGrainCountInClusterAsync(limit.GrainType);
             var grainsPerSilo = grainCount > 0 && siloCount > 0 ? grainCount / siloCount : 0;
 
             _logger?.LogInformation($"Grains Per Silo: {grainsPerSilo}, Upper Bound: {limit.Upperbound}, Grain Count: {grainCount}");
@@ -126,11 +126,11 @@ public class GrpcScalerService : ExternalScaler.ExternalScalerBase
     private async Task<bool> AreTooManyGrainsInTheCluster(ScaledObjectRef request)
     {
         var siloNameFilter = request.ScalerMetadata[SiloNameFilter];
-        var siloCount = await _grainStatsService.GetActiveSiloCountAsync(siloNameFilter);
+        var siloCount = await _orleansStatsService.GetActiveSiloCountAsync(siloNameFilter);
 
         foreach (var limit in GetLimits(request.ScalerMetadata))
         {
-            var grainCount = await _grainStatsService.GetGrainCountInClusterAsync(limit.GrainType);
+            var grainCount = await _orleansStatsService.GetGrainCountInClusterAsync(limit.GrainType);
 
             if (grainCount == 0 || siloCount == 0)
             {
