@@ -19,14 +19,14 @@ public class SomeTest
     [Fact]
     public async Task OneRequest()
     {
-        var count = await _testApp.Cluster.Client.GetGrain<IRequestTrackerGrain>(0).GetRequestsCount();
-        count.Should().Be(0);
+        var baseCount = await _testApp.Cluster.Client.GetGrain<IRequestTrackerGrain>(0).GetRequestsCount();
+  
         
         var request = await _testApp.CreateClient().GetAsync("/random");
         request.StatusCode.Should().Be(HttpStatusCode.OK);
         
-        count = await _testApp.Cluster.Client.GetGrain<IRequestTrackerGrain>(0).GetRequestsCount();
-        count.Should().Be(1);
+        var count = await _testApp.Cluster.Client.GetGrain<IRequestTrackerGrain>(0).GetRequestsCount();
+        count.Should().Be(baseCount+1);
         
         request = await _testApp.CreateClient().GetAsync("/api/scaling/requests");
         request.StatusCode.Should().Be(HttpStatusCode.OK);

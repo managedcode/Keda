@@ -1,5 +1,6 @@
 using ManagedCode.Keda.Orleans.Scaler.Client.Extensions;
 using ManagedCode.Keda.Orleans.Scaler.Extensions;
+using Microsoft.Extensions.Configuration;
 using Orleans;
 using Orleans.Hosting;
 using Orleans.TestingHost;
@@ -17,5 +18,13 @@ public class TestSiloConfigurations : ISiloConfigurator
             services.AddGrpcOrleansScaling();
             services.AddApiOrleansScaling();
         });
+    }
+}
+
+public class TestClientConfigurations : IClientBuilderConfigurator
+{
+    public void Configure(IConfiguration configuration, IClientBuilder clientBuilder)
+    {
+        clientBuilder.UseScaler();
     }
 }

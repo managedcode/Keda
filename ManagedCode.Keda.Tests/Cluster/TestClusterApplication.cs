@@ -14,6 +14,7 @@ public class TestClusterApplication : WebApplicationFactory<HttpHostProgram>, IC
     {
         TestClusterBuilder builder = new TestClusterBuilder();
         builder.AddSiloBuilderConfigurator<TestSiloConfigurations>();
+        builder.AddClientBuilderConfigurator<TestClientConfigurations>();
         Cluster = builder.Build();
         Cluster.Deploy();
     }
