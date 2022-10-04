@@ -1,5 +1,5 @@
 using ManagedCode.Keda.Orleans.Interfaces;
-using ManagedCode.TimeSeries.Sample;
+using ManagedCode.TimeSeries.Summers;
 using Orleans;
 using Orleans.Concurrency;
 

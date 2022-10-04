@@ -10,9 +10,9 @@ namespace ManagedCode.Keda.Orleans.Scaler.Client.Extensions;
 public static class BuilderExtensions
 {
     
-    public static IClientBuilder UseScaler(this IClientBuilder siloBuilder)
+    public static IClientBuilder UseScaler(this IClientBuilder clientBuilder)
     {
-        return siloBuilder.ConfigureApplicationParts(parts =>
+        return clientBuilder.ConfigureApplicationParts(parts =>
         {
             parts.AddFrameworkPart(typeof(IRequestTrackerGrain).Assembly);
         });
