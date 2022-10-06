@@ -8,7 +8,7 @@ namespace ManagedCode.Keda.Orleans.Scaler.Metrics.Grains;
 [Reentrant]
 public class RequestTrackerGrain : Grain, IRequestTrackerGrain
 {
-    private readonly IntTimeSeriesSummer _summer = new(TimeSpan.FromSeconds(1), 10);
+    private readonly IntTimeSeriesSummer _summer = new(TimeSpan.FromSeconds(1), 60);
 
     public Task TrackRequest()
     {

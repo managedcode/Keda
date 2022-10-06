@@ -18,11 +18,10 @@ public class OrleansStatsService
 
     public async Task<int> GetGrainCountInClusterAsync(params string[] grainTypes)
     {
-        var statistics = await _managementGrain.GetDetailedGrainStatistics(grainTypes.Length == 0 ? null : grainTypes);
+        var statistics = await _managementGrain.GetSimpleGrainStatistics();
 
         var activeGrainsInCluster =
-            statistics.Select(grainStatistic => new GrainInfo(grainStatistic.GrainType, grainStatistic.GrainIdentity.IdentityString,
-                grainStatistic.SiloAddress.ToGatewayUri().AbsoluteUri));
+            statistics.Select(grainStatistic => new GrainInfo(grainStatistic.GrainType, grainStatistic.SiloAddress.ToGatewayUri().AbsoluteUri));
 
         var grainCount = activeGrainsInCluster.Count();
 
@@ -33,11 +32,10 @@ public class OrleansStatsService
 
     public async Task<Dictionary<string, int>> GetGrainActivationsAsync()
     {
-        var statistics = await _managementGrain.GetDetailedGrainStatistics();
+        var statistics = await _managementGrain.GetSimpleGrainStatistics();
 
         var activeGrainsInCluster =
-            statistics.Select(grainStatistic => new GrainInfo(grainStatistic.GrainType, grainStatistic.GrainIdentity.IdentityString,
-                grainStatistic.SiloAddress.ToGatewayUri().AbsoluteUri));
+            statistics.Select(grainStatistic => new GrainInfo(grainStatistic.GrainType, grainStatistic.SiloAddress.ToGatewayUri().AbsoluteUri));
 
         return activeGrainsInCluster
             .GroupBy(a => a.Type)
