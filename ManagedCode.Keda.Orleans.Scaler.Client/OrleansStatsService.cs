@@ -34,12 +34,22 @@ public class OrleansStatsService
     {
         var statistics = await _managementGrain.GetSimpleGrainStatistics();
 
-        var activeGrainsInCluster =
-            statistics.Select(grainStatistic => new GrainInfo(grainStatistic.GrainType, grainStatistic.SiloAddress.ToGatewayUri().AbsoluteUri));
+        var result = new Dictionary<string, int>();
 
-        return activeGrainsInCluster
-            .GroupBy(a => a.Type)
-            .ToDictionary(g => g.Key.Split('.').Last(), g => g.Count());
+        foreach (var statistic in statistics)
+        {
+            var grain = statistic.GrainType.Split('.').Last();
+            if (result.TryGetValue(grain, out var count))
+            {
+                result[grain] += statistic.ActivationCount;
+            }
+            else
+            {
+                result[grain] = statistic.ActivationCount;
+            }
+        }
+
+        return result;
     }
 
     public async Task<int> GetActiveSiloCountAsync(string? siloNameFilter = null)

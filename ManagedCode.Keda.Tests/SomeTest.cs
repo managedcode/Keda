@@ -1,7 +1,9 @@
 using System.Net;
 using FluentAssertions;
 using ManagedCode.Keda.Orleans.Interfaces;
+using ManagedCode.Keda.Orleans.Scaler.Client.Models;
 using ManagedCode.Keda.Tests.Cluster;
+using Newtonsoft.Json;
 using Xunit;
 
 namespace ManagedCode.Keda.Tests;
@@ -63,8 +65,18 @@ public class SomeTest
     [Fact]
     public async Task Orleans()
     {
+        var iterations = 2000;
+        for (int i = 0; i < iterations; i++)
+        {
+            await _testApp.Cluster.Client.GetGrain<ISignalRTrackerGrain>(i).OnConnectedAsync();
+            await _testApp.Cluster.Client.GetGrain<IRequestTrackerGrain>(i).TrackRequest();
+        }
+        
         var request = await _testApp.CreateClient().GetAsync("/api/scaling/orleans");
         request.StatusCode.Should().Be(HttpStatusCode.OK);
         var content = await request.Content.ReadAsStringAsync();
+        var dto = JsonConvert.DeserializeObject<OrleansStats>(content);
+        dto.GrainCount.Should().BeGreaterThan(iterations);
+
     }
 }
