@@ -8,7 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="ManagedCode.TimeSeries" Version="0.0.9" />
+        <PackageReference Include="ManagedCode.TimeSeries" Version="0.0.10" />
         <PackageReference Include="Microsoft.Orleans.Runtime.Abstractions" Version="3.6.5" />
         <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
         <PackageReference Include="Microsoft.Orleans.CodeGenerator" Version="3.6.5" />
