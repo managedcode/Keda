@@ -8,5 +8,8 @@ public interface IRequestTrackerGrain : IGrainWithIntegerKey
     [OneWay]
     Task TrackRequest();
     
+    [OneWay]
+    Task TrackRequest(int count);
+    
     Task<int> GetRequestsCount();
 }

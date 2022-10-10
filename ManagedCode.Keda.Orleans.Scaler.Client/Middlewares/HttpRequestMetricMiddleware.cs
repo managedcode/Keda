@@ -11,36 +11,38 @@ public class HttpRequestMetricMiddleware : IDisposable
     private readonly IClusterClient _clusterClient;
     private readonly ILogger<HttpRequestMetricMiddleware> _logger;
     private PeriodicTimer _timer;
-    private Task _timerTask;
     private CancellationTokenSource _token;
     private readonly IntTimeSeriesSummer _summer = new(TimeSpan.FromSeconds(1), 30);
 
-    public HttpRequestMetricMiddleware(ILogger<HttpRequestMetricMiddleware> logger, IClusterClient clusterClient, RequestDelegate next)
+    public HttpRequestMetricMiddleware(ILogger<HttpRequestMetricMiddleware> logger, IClusterClient clusterClient, RequestDelegate next, CancellationTokenSource token)
     {
         _logger = logger;
         _clusterClient = clusterClient;
         _next = next;
-        
-        _timer = new PeriodicTimer(TimeSpan.FromMinutes(1));
-        _timerTask = Task.Run(async () =>
+        _token = token;
+        _timer = new PeriodicTimer(TimeSpan.FromSeconds(10));
+        Task.Run(RunTimer);
+    }
+
+    private async Task RunTimer()
+    {
+        while (await _timer.WaitForNextTickAsync(_token.Token))
         {
-            while (await _timer.WaitForNextTickAsync(_token.Token))
-            {
-                var requests = _summer.Samples.Average(s => s.Value);
-                _logger.LogInformation($"HOSTNAME:{Environment.GetEnvironmentVariable("HOSTNAME")};MachineName:{Environment.MachineName};\n  Requests Number: {requests}");
-            }
-        });
+            var requests = _summer.Average();
+            await _clusterClient.GetGrain<IRequestTrackerGrain>(0).TrackRequest((int)Math.Round(requests));
+            _logger.LogInformation($"HOSTNAME:{Environment.GetEnvironmentVariable("HOSTNAME")};MachineName:{Environment.MachineName};\n  Requests Number: {requests}");
+        }
     }
 
     public async Task Invoke(HttpContext httpContext)
     {
         _summer.Increment();
-        _clusterClient.GetGrain<IRequestTrackerGrain>(0).TrackRequest().Ignore();
         await _next(httpContext);
     }
 
     public void Dispose()
     {
         _token.Cancel();
+        _timer.Dispose();
     }
 }

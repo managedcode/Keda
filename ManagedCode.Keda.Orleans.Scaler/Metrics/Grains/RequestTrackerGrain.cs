@@ -16,12 +16,15 @@ public class RequestTrackerGrain : Grain, IRequestTrackerGrain
         return Task.CompletedTask;
     }
 
+    public Task TrackRequest(int count)
+    {
+        _summer.AddNewData(count);
+        return Task.CompletedTask;
+    }
+
     public Task<int> GetRequestsCount()
     {
-        if (_summer.Samples.Count == 0)
-            return Task.FromResult(0);
-        
-        var avg = _summer.Samples.Average(a => a.Value);
-        return Task.FromResult((int) Math.Round(avg));
+        var avg = _summer.Average();
+        return Task.FromResult((int)Math.Round(avg));
     }
 }
