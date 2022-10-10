@@ -72,8 +72,8 @@ public class SomeTest
         var iterations = 2000;
         for (int i = 0; i < iterations; i++)
         {
-            await _testApp.Cluster.Client.GetGrain<ISignalRTrackerGrain>(i).OnConnectedAsync();
-            await _testApp.Cluster.Client.GetGrain<IRequestTrackerGrain>(i).TrackRequest();
+            await _testApp.Cluster.Client.GetGrain<ISignalRTrackerGrain>(i).OnConnectedAsync("host");
+            await _testApp.Cluster.Client.GetGrain<IRequestTrackerGrain>(i).TrackRequest("host");
         }
         
         var request = await _testApp.CreateClient().GetAsync("/api/scaling/orleans");

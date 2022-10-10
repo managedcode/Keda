@@ -6,13 +6,13 @@ namespace ManagedCode.Keda.Orleans.Interfaces;
 public interface ISignalRTrackerGrain : IGrainWithIntegerKey
 {
     [OneWay]
-    Task OnConnectedAsync();
+    Task OnConnectedAsync(string host);
     
     [OneWay]
-    Task OnDisconnectedAsync();
+    Task OnDisconnectedAsync(string host);
     
     [OneWay]
-    Task TrackConnections(int count);
+    Task TrackConnections(string host, int count);
 
     Task<int> GetConnections();
 }

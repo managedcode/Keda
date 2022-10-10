@@ -6,10 +6,10 @@ namespace ManagedCode.Keda.Orleans.Interfaces;
 public interface IRequestTrackerGrain : IGrainWithIntegerKey
 {
     [OneWay]
-    Task TrackRequest();
+    Task TrackRequest(string host);
     
     [OneWay]
-    Task TrackRequest(int count);
+    Task TrackRequest(string host, int count);
     
     Task<int> GetRequestsCount();
 }

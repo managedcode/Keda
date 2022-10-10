@@ -16,21 +16,18 @@ public class SignalRMonitorMiddleware : IHubFilter
         _logger = logger;
         _clusterClient = clusterClient;
     }
-
-
-
     
     public Task OnConnectedAsync(HubLifetimeContext context, Func<HubLifetimeContext, Task> next)
     {
         Interlocked.Increment(ref _connections);
-        _clusterClient.GetGrain<ISignalRTrackerGrain>(0).TrackConnections(_connections).Ignore();
+        _clusterClient.GetGrain<ISignalRTrackerGrain>(0).TrackConnections(Environment.MachineName, _connections).Ignore();
         return next(context);
     }
 
     public Task OnDisconnectedAsync(HubLifetimeContext context, Exception exception, Func<HubLifetimeContext, Exception, Task> next)
     {
         Interlocked.Decrement(ref _connections);
-        _clusterClient.GetGrain<ISignalRTrackerGrain>(0).TrackConnections(_connections).Ignore();
+        _clusterClient.GetGrain<ISignalRTrackerGrain>(0).TrackConnections(Environment.MachineName, _connections).Ignore();
         return next(context, exception);
     }
     

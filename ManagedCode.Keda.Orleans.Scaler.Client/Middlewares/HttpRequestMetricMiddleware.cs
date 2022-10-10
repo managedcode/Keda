@@ -28,9 +28,9 @@ public class HttpRequestMetricMiddleware : IDisposable
     {
         while (await _timer.WaitForNextTickAsync(_token.Token))
         {
+            _summer.DeleteOverdueSamples();
             var requests = _summer.Average();
-            await _clusterClient.GetGrain<IRequestTrackerGrain>(0).TrackRequest((int)Math.Round(requests));
-            _logger.LogInformation($"HOSTNAME:{Environment.GetEnvironmentVariable("HOSTNAME")};MachineName:{Environment.MachineName};\n  Requests Number: {requests}");
+            await _clusterClient.GetGrain<IRequestTrackerGrain>(0).TrackRequest(Environment.MachineName, requests);
         }
     }
 

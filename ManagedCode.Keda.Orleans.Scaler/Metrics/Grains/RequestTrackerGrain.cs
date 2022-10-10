@@ -8,23 +8,22 @@ namespace ManagedCode.Keda.Orleans.Scaler.Metrics.Grains;
 [Reentrant]
 public class RequestTrackerGrain : Grain, IRequestTrackerGrain
 {
-    private readonly IntTimeSeriesSummer _summer = new(TimeSpan.FromSeconds(1), 30);
+    private readonly IntGroupTimeSeriesSummer _summer = new(TimeSpan.FromSeconds(1), 30, true);
 
-    public Task TrackRequest()
+    public Task TrackRequest(string host)
     {
-        _summer.Increment();
+        _summer.Increment(host);
         return Task.CompletedTask;
     }
 
-    public Task TrackRequest(int count)
+    public Task TrackRequest(string host, int count)
     {
-        _summer.AddNewData(count);
+        _summer.AddNewData(host, count);
         return Task.CompletedTask;
     }
 
     public Task<int> GetRequestsCount()
     {
-        var avg = _summer.Average();
-        return Task.FromResult((int)Math.Round(avg));
+        return Task.FromResult(_summer.Average());
     }
 }
