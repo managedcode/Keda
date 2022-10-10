@@ -13,8 +13,8 @@
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <Product>Managed Code - Keda</Product>
-        <Version>0.0.21</Version>
-        <PackageVersion>0.0.21</PackageVersion>
+        <Version>0.0.22</Version>
+        <PackageVersion>0.0.22</PackageVersion>
     </PropertyGroup>
     <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
         <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>

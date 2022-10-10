@@ -33,4 +33,9 @@ public class SignalRTrackerGrain : Grain, ISignalRTrackerGrain
     {
         return Task.FromResult(_summer.Average());
     }
+
+    public Task<Dictionary<string, int>> GetDetailedConnectionsCount()
+    {
+        return Task.FromResult(_summer.TimeSeries.ToDictionary(k => k.Key, v => v.Value.Average()));
+    }
 }

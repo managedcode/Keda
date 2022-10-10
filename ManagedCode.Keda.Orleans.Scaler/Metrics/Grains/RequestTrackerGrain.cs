@@ -27,4 +27,9 @@ public class RequestTrackerGrain : Grain, IRequestTrackerGrain
     {
         return Task.FromResult(_summer.Average());
     }
+
+    public Task<Dictionary<string, int>> GetDetailedRequestsCount()
+    {
+        return Task.FromResult(_summer.TimeSeries.ToDictionary(k => k.Key, v => v.Value.Average()));
+    }
 }

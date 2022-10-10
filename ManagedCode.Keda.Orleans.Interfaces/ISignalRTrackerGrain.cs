@@ -15,4 +15,5 @@ public interface ISignalRTrackerGrain : IGrainWithIntegerKey
     Task TrackConnections(string host, int count);
 
     Task<int> GetConnections();
+    Task<Dictionary<string,int>> GetDetailedConnectionsCount();
 }

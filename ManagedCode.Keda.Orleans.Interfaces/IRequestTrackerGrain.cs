@@ -12,4 +12,5 @@ public interface IRequestTrackerGrain : IGrainWithIntegerKey
     Task TrackRequest(string host, int count);
     
     Task<int> GetRequestsCount();
+    Task<Dictionary<string,int>> GetDetailedRequestsCount();
 }
