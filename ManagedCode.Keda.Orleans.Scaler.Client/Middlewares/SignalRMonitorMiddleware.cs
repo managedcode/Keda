@@ -9,8 +9,7 @@ public class SignalRMonitorMiddleware : IHubFilter
     private readonly IClusterClient _clusterClient;
 
     private readonly ILogger<SignalRMonitorMiddleware> _logger;
-    private static volatile int _connections;
-    
+
     public SignalRMonitorMiddleware(ILogger<SignalRMonitorMiddleware> logger, IClusterClient clusterClient)
     {
         _logger = logger;
@@ -19,15 +18,13 @@ public class SignalRMonitorMiddleware : IHubFilter
     
     public Task OnConnectedAsync(HubLifetimeContext context, Func<HubLifetimeContext, Task> next)
     {
-        Interlocked.Increment(ref _connections);
-        _clusterClient.GetGrain<ISignalRTrackerGrain>(0).TrackConnections(Environment.MachineName, _connections).Ignore();
+        _clusterClient.GetGrain<ISignalRTrackerGrain>(0).OnConnectedAsync(Environment.MachineName).Ignore();
         return next(context);
     }
 
     public Task OnDisconnectedAsync(HubLifetimeContext context, Exception exception, Func<HubLifetimeContext, Exception, Task> next)
     {
-        Interlocked.Decrement(ref _connections);
-        _clusterClient.GetGrain<ISignalRTrackerGrain>(0).TrackConnections(Environment.MachineName, _connections).Ignore();
+        _clusterClient.GetGrain<ISignalRTrackerGrain>(0).OnDisconnectedAsync(Environment.MachineName).Ignore();
         return next(context, exception);
     }
     

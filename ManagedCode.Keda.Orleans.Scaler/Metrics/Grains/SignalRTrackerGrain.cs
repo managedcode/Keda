@@ -9,7 +9,7 @@ namespace ManagedCode.Keda.Orleans.Scaler.Metrics.Grains;
 [Reentrant]
 public class SignalRTrackerGrain : Grain, ISignalRTrackerGrain
 {
-    private readonly IntGroupTimeSeriesSummer _summer = new(TimeSpan.FromSeconds(1), 30, Strategy.Max, true);
+    private readonly IntGroupTimeSeriesSummer _summer = new(TimeSpan.FromSeconds(1), 30, Strategy.Sum, true);
     
     public Task OnConnectedAsync(string host)
     {
