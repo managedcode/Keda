@@ -1,4 +1,5 @@
 using ManagedCode.Keda.Orleans.Interfaces;
+using ManagedCode.TimeSeries;
 using ManagedCode.TimeSeries.Summers;
 using Orleans;
 using Orleans.Concurrency;
@@ -8,7 +9,7 @@ namespace ManagedCode.Keda.Orleans.Scaler.Metrics.Grains;
 [Reentrant]
 public class RequestTrackerGrain : Grain, IRequestTrackerGrain
 {
-    private readonly IntGroupTimeSeriesSummer _summer = new(TimeSpan.FromSeconds(1), 30, true);
+    private readonly IntGroupTimeSeriesSummer _summer = new(TimeSpan.FromSeconds(1), 30, Strategy.Sum, true);
 
     public Task TrackRequest(string host)
     {
