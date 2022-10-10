@@ -14,12 +14,12 @@ public class HttpRequestMetricMiddleware : IDisposable
     private CancellationTokenSource _token;
     private readonly IntTimeSeriesSummer _summer = new(TimeSpan.FromSeconds(1), 30);
 
-    public HttpRequestMetricMiddleware(ILogger<HttpRequestMetricMiddleware> logger, IClusterClient clusterClient, RequestDelegate next, CancellationTokenSource token)
+    public HttpRequestMetricMiddleware(ILogger<HttpRequestMetricMiddleware> logger, IClusterClient clusterClient, RequestDelegate next)
     {
         _logger = logger;
         _clusterClient = clusterClient;
         _next = next;
-        _token = token;
+        _token = new();
         _timer = new PeriodicTimer(TimeSpan.FromSeconds(10));
         Task.Run(RunTimer);
     }
