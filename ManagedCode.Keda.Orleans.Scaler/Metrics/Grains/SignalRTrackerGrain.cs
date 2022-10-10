@@ -8,26 +8,22 @@ namespace ManagedCode.Keda.Orleans.Scaler.Metrics.Grains;
 [Reentrant]
 public class SignalRTrackerGrain : Grain, ISignalRTrackerGrain
 {
-    private readonly IntTimeSeriesSummer _summer = new(TimeSpan.FromSeconds(1), 30);
+    private volatile int _count;
     
     public Task OnConnectedAsync()
     {
-        _summer.Increment();
+        Interlocked.Increment(ref _count);
         return Task.CompletedTask;
     }
 
     public Task OnDisconnectedAsync()
     {
-        _summer.Decrement();
+        Interlocked.Decrement(ref _count);
         return Task.CompletedTask;
     }
 
     public Task<int> GetConnections()
     {
-        if (_summer.Samples.Count == 0)
-            return Task.FromResult(0);
-        
-        var avg = _summer.Samples.Average(a => a.Value);
-        return Task.FromResult((int) Math.Round(avg));
+        return Task.FromResult(_count);
     }
 }
