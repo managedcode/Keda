@@ -12,7 +12,7 @@ public class HttpRequestMetricMiddleware : IDisposable
     private readonly ILogger<HttpRequestMetricMiddleware> _logger;
     private PeriodicTimer _timer;
     private CancellationTokenSource _token;
-    private readonly IntTimeSeriesSummer _summer = new(TimeSpan.FromSeconds(1), 30);
+    private static readonly IntTimeSeriesSummer _summer = new(TimeSpan.FromSeconds(1), 30);
 
     public HttpRequestMetricMiddleware(ILogger<HttpRequestMetricMiddleware> logger, IClusterClient clusterClient, RequestDelegate next)
     {
