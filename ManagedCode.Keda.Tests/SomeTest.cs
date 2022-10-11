@@ -27,7 +27,7 @@ public class SomeTest
         var request = await _testApp.CreateClient().GetAsync("/random");
         request.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        await Task.Delay(TimeSpan.FromSeconds(10));
+        await Task.Delay(TimeSpan.FromSeconds(11));
 
         var count = await _testApp.Cluster.Client.GetGrain<IRequestTrackerGrain>(0).GetRequestsCount();
         count.Should().Be(baseCount+1);
@@ -40,14 +40,14 @@ public class SomeTest
     [Fact]
     public async Task OneSignalR()
     {
+        await Task.Delay(TimeSpan.FromSeconds(11));
         var count = await _testApp.Cluster.Client.GetGrain<ISignalRTrackerGrain>(0).GetConnections();
         count.Should().Be(0);
-        
-        
+
         var client = _testApp.CreateSignalRClient(nameof(TestHub));
         await client.StartAsync();
 
-        await Task.Delay(TimeSpan.FromSeconds(10));
+        await Task.Delay(TimeSpan.FromSeconds(11));
 
         count = await _testApp.Cluster.Client.GetGrain<ISignalRTrackerGrain>(0).GetConnections();
         count.Should().Be(1);
@@ -59,7 +59,7 @@ public class SomeTest
         await client.StopAsync();
         await client.DisposeAsync();
 
-        await Task.Delay(TimeSpan.FromSeconds(10));
+        await Task.Delay(TimeSpan.FromSeconds(11));
         
         count = await _testApp.Cluster.Client.GetGrain<ISignalRTrackerGrain>(0).GetConnections();
         count.Should().Be(0);

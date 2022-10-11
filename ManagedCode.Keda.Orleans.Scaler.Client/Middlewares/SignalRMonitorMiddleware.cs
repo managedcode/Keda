@@ -7,15 +7,22 @@ namespace ManagedCode.Keda.Orleans.Scaler.Client.Middlewares;
 
 public class SignalRMonitorMiddleware : IHubFilter
 {
-    private readonly IClusterClient _clusterClient;
+    private static IClusterClient? _clusterClient;
     private static readonly HashSet<string> ConnectedClients = new ();
+    private static Timer _timer = new Timer(Callback, null, TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(10));
+
+    private static void Callback(object? state)
+    {
+        _clusterClient?.GetGrain<ISignalRTrackerGrain>(0).TrackConnections(Environment.MachineName, ConnectedClients.Count).Ignore();
+    }
+
     private readonly ILogger<SignalRMonitorMiddleware> _logger;
     
 
     public SignalRMonitorMiddleware(ILogger<SignalRMonitorMiddleware> logger, IClusterClient clusterClient)
     {
         _logger = logger;
-        _clusterClient = clusterClient;
+        _clusterClient ??= clusterClient;
     }
     
     public Task OnConnectedAsync(HubLifetimeContext context, Func<HubLifetimeContext, Task> next)
@@ -24,7 +31,7 @@ public class SignalRMonitorMiddleware : IHubFilter
         {
             ConnectedClients.Add(context.Context.ConnectionId);
         }
-        _clusterClient.GetGrain<ISignalRTrackerGrain>(0).TrackConnections(Environment.MachineName, ConnectedClients.Count).Ignore();
+        
         return next(context);
     }
 
@@ -35,7 +42,6 @@ public class SignalRMonitorMiddleware : IHubFilter
             ConnectedClients.Remove(context.Context.ConnectionId);
         }
         
-        _clusterClient.GetGrain<ISignalRTrackerGrain>(0).TrackConnections(Environment.MachineName, ConnectedClients.Count).Ignore();
         return next(context, exception);
     }
     
