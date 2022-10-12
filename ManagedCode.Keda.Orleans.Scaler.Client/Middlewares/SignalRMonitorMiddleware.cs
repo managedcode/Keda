@@ -14,7 +14,10 @@ public class SignalRMonitorMiddleware : IHubFilter
 
     private static void Callback(object? state)
     {
-        _clusterClient?.GetGrain<ISignalRTrackerGrain>(0).TrackConnections(Environment.MachineName, _count).Ignore();
+        if (_clusterClient?.IsInitialized == true)
+        {
+            _clusterClient.GetGrain<ISignalRTrackerGrain>(0).TrackConnections(Environment.MachineName, _count).Ignore();
+        }
     }
 
     private readonly ILogger<SignalRMonitorMiddleware> _logger;
@@ -26,6 +29,8 @@ public class SignalRMonitorMiddleware : IHubFilter
         _clusterClient ??= clusterClient;
     }
     
+
+
     public Task OnConnectedAsync(HubLifetimeContext context, Func<HubLifetimeContext, Task> next)
     {
         Interlocked.Increment(ref _count);

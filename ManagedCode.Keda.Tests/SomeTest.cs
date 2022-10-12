@@ -5,6 +5,7 @@ using ManagedCode.Keda.Orleans.Scaler.Client.Models;
 using ManagedCode.Keda.Tests.Cluster;
 using Newtonsoft.Json;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace ManagedCode.Keda.Tests;
 
@@ -12,10 +13,12 @@ namespace ManagedCode.Keda.Tests;
 public class SomeTest 
 {
     private readonly TestClusterApplication _testApp;
+    private readonly ITestOutputHelper _outputHelper;
 
-    public SomeTest(TestClusterApplication testApp)
+    public SomeTest(TestClusterApplication testApp, ITestOutputHelper outputHelper)
     {
         _testApp = testApp;
+        _outputHelper = outputHelper;
     }
     
     [Fact]
@@ -64,6 +67,59 @@ public class SomeTest
         count = await _testApp.Cluster.Client.GetGrain<ISignalRTrackerGrain>(0).GetConnections();
         count.Should().Be(0);
         
+    }
+    
+    [Fact]
+    public async Task SignalR_500()
+    {
+        var count = await _testApp.Cluster.Client.GetGrain<ISignalRTrackerGrain>(0).GetConnections();
+        count.Should().Be(0);
+
+        for (int i = 0; i < 500; i++)
+        {
+            var connection = _testApp.CreateSignalRClient(nameof(TestHub));
+            
+            try
+            {
+                var local = i;
+                await connection.StartAsync();
+                if (i % 100 == 0)
+                {
+                    _outputHelper.WriteLine($"Connected:{local}");
+                }
+               
+                //if (i % 50 != 0)
+                {
+                    _ = Task.Delay(TimeSpan.FromMinutes(2)).ContinueWith(async task =>
+                    {
+                        await connection.StopAsync();
+                        await connection.DisposeAsync();
+                        if (local % 100 == 0)
+                        {
+                            _outputHelper.WriteLine($"Disconnected:{local}");
+                        }
+                    
+                    });
+                }
+                
+            }
+            catch (Exception e)
+            {
+                _outputHelper.WriteLine(e.Message);
+            }
+
+        }
+
+        _outputHelper.WriteLine($"Wait.....");
+        await Task.Delay(TimeSpan.FromMinutes(1));
+        _outputHelper.WriteLine($"Wait..... one more");
+        await Task.Delay(TimeSpan.FromMinutes(1));
+        _outputHelper.WriteLine($"Wait..... and one more");
+        await Task.Delay(TimeSpan.FromMinutes(1));
+
+        
+        count = await _testApp.Cluster.Client.GetGrain<ISignalRTrackerGrain>(0).GetConnections();
+        count.Should().Be(0);
     }
     
     [Fact]
