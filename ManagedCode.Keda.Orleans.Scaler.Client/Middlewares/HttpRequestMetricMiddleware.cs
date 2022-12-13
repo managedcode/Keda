@@ -1,7 +1,5 @@
 using ManagedCode.Keda.Orleans.Interfaces;
 using ManagedCode.TimeSeries.Summers;
-using Microsoft.AspNetCore.Http.Extensions;
-using Orleans;
 
 namespace ManagedCode.Keda.Orleans.Scaler.Client.Middlewares;
 
@@ -19,7 +17,7 @@ public class HttpRequestMetricMiddleware : IDisposable
         _logger = logger;
         _clusterClient = clusterClient;
         _next = next;
-        _token = new();
+        _token = new CancellationTokenSource();
         _timer = new PeriodicTimer(TimeSpan.FromSeconds(10));
         Task.Run(RunTimer);
     }
@@ -28,7 +26,7 @@ public class HttpRequestMetricMiddleware : IDisposable
     {
         while (await _timer.WaitForNextTickAsync(_token.Token))
         {
-            if (_clusterClient?.IsInitialized == true)
+            if (_clusterClient is not null)
             {
                 _summer.DeleteOverdueSamples();
                 var requests = _summer.Average();

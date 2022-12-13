@@ -3,24 +3,14 @@ using ManagedCode.Keda.Orleans.Scaler.Client.Middlewares;
 using ManagedCode.Keda.Orleans.Scaler.Client.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
-using Orleans;
 
 namespace ManagedCode.Keda.Orleans.Scaler.Client.Extensions;
 
 public static class BuilderExtensions
 {
-    
-    public static IClientBuilder UseScaler(this IClientBuilder clientBuilder)
-    {
-        return clientBuilder.ConfigureApplicationParts(parts =>
-        {
-            parts.AddFrameworkPart(typeof(IRequestTrackerGrain).Assembly);
-        });
-    }
-    
     public static IApplicationBuilder UseScalerForRequest(this IApplicationBuilder app)
     {
-        if (app == null)
+        if (app is null)
         {
             throw new ArgumentNullException(nameof(app));
         }
@@ -64,7 +54,7 @@ public static class BuilderExtensions
 
         return endpoints;
     }
-    
+
     public static IEndpointRouteBuilder MapRequestsScaler(this IEndpointRouteBuilder endpoints, string apiRoute = "/api/scaling/requests")
     {
         endpoints.MapGet(apiRoute, async ([FromServices] IClusterClient clusterClient) =>
@@ -78,14 +68,14 @@ public static class BuilderExtensions
 
     public static void AddScalerForSignalR(this HubOptions options)
     {
-        if (options == null)
+        if (options is null)
         {
             throw new ArgumentNullException(nameof(options));
         }
 
         options.AddFilter<SignalRMonitorMiddleware>();
     }
-    
+
     public static IServiceCollection AddGrpcOrleansScaling(this IServiceCollection services)
     {
         services.AddSingleton<OrleansStatsService>();
