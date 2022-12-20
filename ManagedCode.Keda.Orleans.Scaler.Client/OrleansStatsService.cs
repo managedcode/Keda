@@ -1,5 +1,4 @@
 using ManagedCode.Keda.Orleans.Scaler.Client.Models;
-using Orleans;
 using Orleans.Runtime;
 
 namespace ManagedCode.Keda.Orleans.Scaler.Client;
@@ -9,10 +8,10 @@ public class OrleansStatsService
     private readonly ILogger<OrleansStatsService> _logger;
     private readonly IManagementGrain _managementGrain;
 
-    public OrleansStatsService(IClusterClient orleansClusterClient, ILogger<OrleansStatsService> logger)
+    public OrleansStatsService(IClusterClient grainFactory, ILogger<OrleansStatsService> logger)
     {
         _logger = logger;
-        _managementGrain = orleansClusterClient.GetGrain<IManagementGrain>(0);
+        _managementGrain = grainFactory.GetGrain<IManagementGrain>(0);
     }
 
 
@@ -39,7 +38,8 @@ public class OrleansStatsService
         foreach (var statistic in statistics)
         {
             var grain = statistic.GrainType.Split('.').Last();
-            if (result.TryGetValue(grain, out var count))
+            
+            if (result.TryGetValue(grain, out _))
             {
                 result[grain] += statistic.ActivationCount;
             }

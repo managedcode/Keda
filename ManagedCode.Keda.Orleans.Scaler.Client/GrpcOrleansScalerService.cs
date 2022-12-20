@@ -145,7 +145,7 @@ public class GrpcOrleansScalerService : ExternalScaler.ExternalScalerBase
         return false;
     }
 
-    private IEnumerable<Limit> GetLimits(IReadOnlyDictionary<string, string> metadata)
+    private static IEnumerable<Limit> GetLimits(IReadOnlyDictionary<string, string> metadata)
     {
         return metadata[Limits]
             .Split(';')
