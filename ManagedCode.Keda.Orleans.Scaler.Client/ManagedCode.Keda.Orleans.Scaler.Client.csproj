@@ -10,9 +10,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Grpc.AspNetCore" Version="2.50.0" />
+        <PackageReference Include="Grpc.AspNetCore" Version="2.51.0" />
         <PackageReference Include="ManagedCode.TimeSeries" Version="0.0.17" />
-        <PackageReference Include="Microsoft.Orleans.Client" Version="7.0.0" />
+        <PackageReference Include="Microsoft.Orleans.Client" Version="7.1.0" />
     </ItemGroup>
 
     <!--NuGet-->
