@@ -1,3 +1,4 @@
+using Grpc.AspNetCore.Server;
 using ManagedCode.Keda.Orleans.Interfaces;
 using ManagedCode.Keda.Orleans.Scaler.Client.Middlewares;
 using ManagedCode.Keda.Orleans.Scaler.Client.Models;
@@ -20,7 +21,10 @@ public static class BuilderExtensions
 
     public static IApplicationBuilder UseApiOrleansScaler(this IApplicationBuilder app)
     {
-        app.UseEndpoints(endpoints => { endpoints.MapGrpcService<GrpcOrleansScalerService>(); });
+        app.UseEndpoints(endpoints =>
+        {
+            endpoints.MapGrpcService<GrpcOrleansScalerService>();
+        });
 
         return app;
     }
@@ -30,7 +34,6 @@ public static class BuilderExtensions
         endpoints.MapGet(apiRoute, async ([FromServices] IClusterClient clusterClient) =>
         {
             var count = await clusterClient.GetGrain<IRequestTrackerGrain>(0).GetRequestsCount();
-
             return new RequestsStats(count);
         });
 
@@ -51,7 +54,6 @@ public static class BuilderExtensions
     public static IEndpointRouteBuilder MapOrleansScaler(this IEndpointRouteBuilder endpoints, string apiRoute = "/api/scaling/orleans")
     {
         endpoints.MapGet(apiRoute, ([FromServices] ApiOrleansScalerService scaler) => scaler.GetOrleansStatsAsync());
-
         return endpoints;
     }
 
@@ -78,15 +80,23 @@ public static class BuilderExtensions
 
     public static IServiceCollection AddGrpcOrleansScaling(this IServiceCollection services)
     {
-        services.AddSingleton<OrleansStatsService>();
         services.AddGrpc();
+        services.AddSingleton<OrleansStatsService>();
+
+        return services;
+    }
+    
+    public static IServiceCollection AddGrpcOrleansScaling(this IServiceCollection services, Action<GrpcServiceOptions> configureOptions)
+    {
+        services.AddGrpc(configureOptions);
+        services.AddSingleton<OrleansStatsService>();
 
         return services;
     }
 
     public static IServiceCollection AddApiOrleansScaling(this IServiceCollection services)
     {
-        services.AddSingleton<OrleansStatsService>();
+        services.AddGrpcOrleansScaling();
         services.AddSingleton<ApiOrleansScalerService>();
 
         return services;

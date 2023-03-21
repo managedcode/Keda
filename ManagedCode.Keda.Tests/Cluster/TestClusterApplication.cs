@@ -7,8 +7,8 @@ using Xunit;
 
 namespace ManagedCode.Keda.Tests.Cluster;
 
-[CollectionDefinition(nameof(TestClusterApplication))]
-public class TestClusterApplication : WebApplicationFactory<HttpHostProgram>, ICollectionFixture<TestClusterApplication>
+
+public class TestClusterApplication : WebApplicationFactory<HttpHostProgram>
 {
     public TestClusterApplication()
     {

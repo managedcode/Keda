@@ -14,10 +14,10 @@
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="FluentAssertions" Version="6.10.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="7.0.3" />
-        <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="7.0.3" />
-        <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson" Version="7.0.3" />
-        <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="7.0.3" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="7.0.4" />
+        <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="7.0.4" />
+        <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson" Version="7.0.4" />
+        <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="7.0.4" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />

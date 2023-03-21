@@ -14,7 +14,6 @@ public class OrleansStatsService
         _managementGrain = grainFactory.GetGrain<IManagementGrain>(0);
     }
 
-
     public async Task<int> GetGrainCountInClusterAsync(params string[] grainTypes)
     {
         var statistics = await _managementGrain.GetSimpleGrainStatistics();

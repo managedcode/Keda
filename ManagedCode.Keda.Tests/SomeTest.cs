@@ -9,33 +9,31 @@ using Xunit.Abstractions;
 
 namespace ManagedCode.Keda.Tests;
 
-[Collection(nameof(TestClusterApplication))]
-public class SomeTest 
+
+public class SomeTest : TestClusterApplication
 {
-    private readonly TestClusterApplication _testApp;
     private readonly ITestOutputHelper _outputHelper;
 
-    public SomeTest(TestClusterApplication testApp, ITestOutputHelper outputHelper)
+    public SomeTest(ITestOutputHelper outputHelper)
     {
-        _testApp = testApp;
         _outputHelper = outputHelper;
     }
     
     [Fact]
     public async Task OneRequest()
     {
-        var baseCount = await _testApp.Cluster.Client.GetGrain<IRequestTrackerGrain>(0).GetRequestsCount();
+        var baseCount = await this.Cluster.Client.GetGrain<IRequestTrackerGrain>(0).GetRequestsCount();
   
         
-        var request = await _testApp.CreateClient().GetAsync("/random");
+        var request = await this.CreateClient().GetAsync("/random");
         request.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        await Task.Delay(TimeSpan.FromSeconds(11));
+        await Task.Delay(TimeSpan.FromSeconds(15));
 
-        var count = await _testApp.Cluster.Client.GetGrain<IRequestTrackerGrain>(0).GetRequestsCount();
+        var count = await this.Cluster.Client.GetGrain<IRequestTrackerGrain>(0).GetRequestsCount();
         count.Should().Be(baseCount+1);
         
-        request = await _testApp.CreateClient().GetAsync("/api/scaling/requests");
+        request = await this.CreateClient().GetAsync("/api/scaling/requests");
         request.StatusCode.Should().Be(HttpStatusCode.OK);
         var content = await request.Content.ReadAsStringAsync();
     }
@@ -43,28 +41,28 @@ public class SomeTest
     [Fact]
     public async Task OneSignalR()
     {
-        await Task.Delay(TimeSpan.FromSeconds(11));
-        var count = await _testApp.Cluster.Client.GetGrain<ISignalRTrackerGrain>(0).GetConnections();
+        await Task.Delay(TimeSpan.FromSeconds(15));
+        var count = await this.Cluster.Client.GetGrain<ISignalRTrackerGrain>(0).GetConnections();
         count.Should().Be(0);
 
-        var client = _testApp.CreateSignalRClient(nameof(TestHub));
+        var client = this.CreateSignalRClient(nameof(TestHub));
         await client.StartAsync();
 
-        await Task.Delay(TimeSpan.FromSeconds(11));
+        await Task.Delay(TimeSpan.FromSeconds(15));
 
-        count = await _testApp.Cluster.Client.GetGrain<ISignalRTrackerGrain>(0).GetConnections();
+        count = await this.Cluster.Client.GetGrain<ISignalRTrackerGrain>(0).GetConnections();
         count.Should().Be(1);
         
-        var request = await _testApp.CreateClient().GetAsync("/api/scaling/signalr");
+        var request = await this.CreateClient().GetAsync("/api/scaling/signalr");
         request.StatusCode.Should().Be(HttpStatusCode.OK);
         var content = await request.Content.ReadAsStringAsync();
 
         await client.StopAsync();
         await client.DisposeAsync();
 
-        await Task.Delay(TimeSpan.FromSeconds(11));
+        await Task.Delay(TimeSpan.FromSeconds(15));
         
-        count = await _testApp.Cluster.Client.GetGrain<ISignalRTrackerGrain>(0).GetConnections();
+        count = await this.Cluster.Client.GetGrain<ISignalRTrackerGrain>(0).GetConnections();
         count.Should().Be(0);
         
     }
@@ -72,12 +70,12 @@ public class SomeTest
     [Fact]
     public async Task SignalR_500()
     {
-        var count = await _testApp.Cluster.Client.GetGrain<ISignalRTrackerGrain>(0).GetConnections();
+        var count = await this.Cluster.Client.GetGrain<ISignalRTrackerGrain>(0).GetConnections();
         count.Should().Be(0);
 
         for (int i = 0; i < 500; i++)
         {
-            var connection = _testApp.CreateSignalRClient(nameof(TestHub));
+            var connection = this.CreateSignalRClient(nameof(TestHub));
             
             try
             {
@@ -118,7 +116,7 @@ public class SomeTest
         await Task.Delay(TimeSpan.FromMinutes(1));
 
         
-        count = await _testApp.Cluster.Client.GetGrain<ISignalRTrackerGrain>(0).GetConnections();
+        count = await this.Cluster.Client.GetGrain<ISignalRTrackerGrain>(0).GetConnections();
         count.Should().Be(0);
     }
     
@@ -128,11 +126,11 @@ public class SomeTest
         var iterations = 2000;
         for (int i = 0; i < iterations; i++)
         {
-            await _testApp.Cluster.Client.GetGrain<ISignalRTrackerGrain>(i).OnConnectedAsync("host");
-            await _testApp.Cluster.Client.GetGrain<IRequestTrackerGrain>(i).TrackRequest("host");
+            await this.Cluster.Client.GetGrain<ISignalRTrackerGrain>(i).OnConnectedAsync("host");
+            await this.Cluster.Client.GetGrain<IRequestTrackerGrain>(i).TrackRequest("host");
         }
         
-        var request = await _testApp.CreateClient().GetAsync("/api/scaling/orleans");
+        var request = await this.CreateClient().GetAsync("/api/scaling/orleans");
         request.StatusCode.Should().Be(HttpStatusCode.OK);
         var content = await request.Content.ReadAsStringAsync();
         var dto = JsonConvert.DeserializeObject<OrleansStats>(content);
